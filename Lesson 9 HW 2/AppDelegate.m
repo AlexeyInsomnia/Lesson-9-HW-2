@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "APDoctor.h"
+#import "APDoctor.h"
+#import "APFriend.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +20,124 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    
+    NSLog(@"************************  baby mode is ON - tasks 1-5 *****************");
+    NSLog(@"************************  student mode is ON - task 6 - 10*****************");
+    
+    APPatient* patient1 = [[APPatient alloc] init];
+    patient1.name = @"Stella";
+    patient1.temperature = 38.f;
+    
+    APPatient* patient2 = [[APPatient alloc] init];
+    patient2.name = @"John";
+    patient2.temperature = 40.f;
+    
+    APPatient* patient3 = [[APPatient alloc] init];
+    patient3.name = @"UVasya";
+    patient3.temperature = 36.6f;
+    
+    APPatient* patient4 = [[APPatient alloc] init];
+    patient4.name = @"Rimus";
+    patient4.temperature = 37.6f;
+    
+    APDoctor* doctor1 = [[APDoctor alloc] init];
+    
+    APFriend* friend1 = [[APFriend alloc] init];
+    APFriend* friend2 = [[APFriend alloc] init];
+    
+
+    patient1.delegate = doctor1;
+    patient1.doctorIs = @"doctor1";
+    
+    patient2.delegate = friend1;
+    patient2.doctorIs = @"friend1";
+    
+    patient3.delegate = doctor1;
+    patient3.doctorIs = @"doctor1";
+    
+    patient4.delegate = friend2;
+    patient4.doctorIs = @"friend2";
+    
+    NSMutableDictionary* raport = [[NSMutableDictionary alloc] init];
+    
+    
+    NSLog(@"patient 1 fells good or not - %@", [patient1 howAreYou] ? @"YES":@"NO");
+    NSLog(@"patient 2 fells good or not - %@", [patient2 howAreYou] ? @"YES":@"NO");
+    NSLog(@"patient 3 fells good or not - %@", [patient3 howAreYou] ? @"YES":@"NO");
+    NSLog(@"patient 3 fells good or not - %@", [patient4 howAreYou] ? @"YES":@"NO");
+    
+    
+    NSLog(@" AND AGAIN - NOW ALL FEELS BAD 100percents - now array like in task 1-5");
+    
+    NSArray* array = [[NSArray alloc] initWithObjects:patient1, patient2, patient3, patient4, nil];
+    
+    for (APPatient* patientInsideCickle in array) {
+        [patientInsideCickle iFeelBad];
+        
+        
+    }
+    
+    NSLog(@"++++++++++++ AND  one more variant to push delegate*******");
+    
+    for (APPatient* patientInsideCickle in array) {
+      
+        [patientInsideCickle.delegate patientFeelsBad:patientInsideCickle];
+        
+    }
+    
+    NSLog(@"************************  master mode is ON - tasks 11 -12 *****************");
+    
+    for (APPatient* patientInsideCickle in array) {
+      
+        int forRaport = arc4random_uniform(3);
+        [patientInsideCickle.delegate patient:patientInsideCickle hasSickPart:forRaport];
+        
+        NSString* sickPartForRaport;
+  
+        
+        if (forRaport == 0) {
+            sickPartForRaport = @"arm";
+        } else if (forRaport == 1) {
+            sickPartForRaport = @"leg";
+        } else if (forRaport ==2) {
+            sickPartForRaport = @"head";
+        }
+        
+        
+        [raport setObject:sickPartForRaport forKey:patientInsideCickle.name];
+    
+    }
+    
+    NSLog(@"raport is: %@" , raport);
+    
+    NSLog(@"************************  superman mode is ON - tasks 13-16 *****************");
+    
+    for (APPatient* obj in array) {
+        NSLog(@"patient %@ thinks that doctor is - %@", obj.name, [obj doctorsIsGood] ? @"good" :@"bad");
+        if ((obj.doctorsIsGood == 0) && (obj.delegate = doctor1)) {
+            obj.delegate = friend1;
+            obj.doctorIs = @"friend1";
+            NSLog(@" i changed a doctor to the - %@", obj.doctorIs);
+        } else {
+            if ((obj.doctorsIsGood == 0) && (obj.delegate = friend1)) {
+                obj.delegate = doctor1;
+                obj.doctorIs = @"doctor1";
+                NSLog(@" i changed a doctor to the - %@", obj.doctorIs);
+            } else {
+                if ((obj.doctorsIsGood == 0) && (obj.delegate = friend2)) {
+                    obj.delegate = doctor1;
+                    obj.doctorIs = @"doctor1";
+                    NSLog(@" i changed a doctor to the - %@", obj.doctorIs);}
+        }
+    }
+    }
+    NSLog(@"----------------and now again with new doctors");
+    for (APPatient* patientInsideCickle in array) {
+        
+        [patientInsideCickle.delegate patientFeelsBad:patientInsideCickle];
+        
+    }
     return YES;
 }
 
